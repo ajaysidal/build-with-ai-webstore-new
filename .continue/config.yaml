@@ -1,38 +1,9 @@
-name: Enterprise Domain Hub Agent
-version: 1.0.0
-schema: v1
-
 models:
-  - name: Qwen 2.5 Coder (Local Ollama)
+  - title: Qwen 2.5 Coder 7B
     provider: ollama
-    model: qwen2.5-coder
-    roles: [chat, edit, agent]
-    options:
-      num_ctx: 16384
-
-rules:
-  - name: Next.js & TypeScript Standards
-    alwaysApply: true
-    description: Coding guidelines for Next.js App Router and TypeScript
-    content: |
-      - Use Next.js App Router conventions (Server Actions, Server Components by default).
-      - Strict TypeScript mode. Avoid `any`; use precise types or interfaces.
-      - Use Tailwind CSS v4 and shadcn/ui component patterns.
-
-  - name: Openprovider API Integration
-    alwaysApply: true
-    description: Standards for secure Openprovider domain handling
-    content: |
-      - All API requests to Openprovider must use the authenticated client wrapper in `lib/openprovider.ts`.
-      - Handle errors gracefully and return standardized response objects with proper error logging.
-
-context:
-  - name: codebase
-  - name: diff
-  - name: terminal
-  - name: problems
-
-mcpServers:
-  - name: filesystem
-    command: npx
-    args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/asidal/enterprise-domain-hub"]
+    model: qwen2.5-coder:7b-instruct-q4_K_M
+    contextLength: 16384
+tabAutocompleteModel:
+  - title: Qwen 2.5 Coder 1.5B
+    provider: ollama
+    model: qwen2.5-coder:1.5b-instruct
