@@ -1,69 +1,54 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { checkDomainAvailability } from '@/app/actions/domains';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react'
+import { checkDomainAvailability } from '@/app/actions/domains'
 
 export function DomainSearch() {
-  const [domain, setDomain] = useState('');
-  const [extension, setExtension] = useState('com');
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [domain, setDomain] = useState('')
+  const [result, setResult] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
 
   const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!domain) return;
-
-    setLoading(true);
-    setError(null);
-    setResult(null);
-
-    const res = await checkDomainAvailability(domain, extension);
-    if (res.success) {
-      setResult(res.data);
-    } else {
-      setError(res.error);
+    e.preventDefault()
+    if (!domain) return
+    setLoading(true)
+    try {
+      const res = await checkDomainAvailability(domain)
+      setResult(res)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false);
-  };
+  }
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-card border rounded-xl shadow-sm">
+    <div className="w-full max-w-xl mx-auto p-4">
       <form onSubmit={handleSearch} className="flex gap-2">
         <input
           type="text"
-          placeholder="Enter domain name..."
           value={domain}
           onChange={(e) => setDomain(e.target.value)}
-          className="flex-1 px-4 py-2 border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          placeholder="Enter your domain (e.g., example.com)"
+          className="border p-2 rounded flex-1"
         />
-        <select
-          value={extension}
-          onChange={(e) => setExtension(e.target.value)}
-          className="px-3 py-2 border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <option value="com">.com</option>
-          <option value="net">.net</option>
-          <option value="org">.org</option>
-          <option value="io">.io</option>
-          <option value="co.nz">.co.nz</option>
-        </select>
-        <Button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className="bg-blue-600 text-white p-2 rounded">
           {loading ? 'Checking...' : 'Search'}
-        </Button>
+        </button>
       </form>
-
-      {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
-
       {result && (
-        <div className="mt-6 p-4 border rounded-lg bg-muted/50">
-          <h3 className="font-semibold text-sm mb-2">Availability Result:</h3>
-          <pre className="text-xs overflow-x-auto p-2 bg-background rounded border">
-            {JSON.stringify(result, null, 2)}
-          </pre>
+        <div className="mt-4 p-4 border rounded">
+          {result.success ? (
+            <div>
+              <p><strong>Domain:</strong> {result.domain}</p>
+              <p><strong>Status:</strong> {result.status}</p>
+              <p><strong>Price:</strong> ${result.price?.price} {result.price?.currency}</p>
+            </div>
+          ) : (
+            <p className="text-red-500">{result.error}</p>
+          )}
         </div>
       )}
     </div>
-  );
+  )
 }
