@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface CartItem {
   domain: string
@@ -14,14 +15,19 @@ interface CartStore {
   clearCart: () => void
 }
 
-export const useCartStore = create<CartStore>((set) => ({
-  items: [],
-  addItem: (item) => set((state: CartStore) => {
-    if (state.items.some((i) => i.domain === item.domain)) return state
-    return { items: [...state.items, item] }
-  }),
-  removeItem: (domain) => set((state: CartStore) => ({
-    items: state.items.filter((i) => i.domain !== domain),
-  })),
-  clearCart: () => set({ items: [] }),
-}))
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set) => ({
+      items: [],
+      addItem: (item) => set((state) => {
+        if (state.items.some((i) => i.domain === item.domain)) return state
+        return { items: [...state.items, item] }
+      }),
+      removeItem: (domain) => set((state) => ({
+        items: state.items.filter((i) => i.domain !== domain),
+      })),
+      clearCart: () => set({ items: [] }),
+    }),
+    { name: 'domain-cart-storage' }
+  )
+)
