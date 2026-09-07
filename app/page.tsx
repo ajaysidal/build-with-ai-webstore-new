@@ -1,13 +1,12 @@
-import { DomainSearch } from '@/components/domain-search';
+import { DomainSearch } from '@/components/domain-search'
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-background">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold tracking-tight mb-2">Enterprise Domain Hub</h1>
-        <p className="text-muted-foreground">Search and manage your global domain portfolio.</p>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
+        <h1 className="text-4xl font-bold text-center mb-8">Enterprise Domain Hub</h1>
+        <DomainSearch />
       </div>
-      <DomainSearch />
     </main>
-  );
+  )
 }
