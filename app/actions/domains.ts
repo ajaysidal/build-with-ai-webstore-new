@@ -1,5 +1,7 @@
 'use server'
 
+import { queryOpenproviderDomain } from '@/lib/openprovider'
+
 interface DomainCheckResult {
   domain: string
   available: boolean
@@ -8,21 +10,13 @@ interface DomainCheckResult {
 }
 
 export async function checkDomainAvailability(domainName: string): Promise<DomainCheckResult> {
-  // Clean input
   const domain = domainName.trim().toLowerCase()
-  
-  // TODO: Replace with actual Openprovider API call
-  // const response = await fetch('https://api.openprovider.eu/v1/domains/check', { ... })
-  
-  // Simulated API latency and response for development
-  await new Promise((resolve) => setTimeout(resolve, 600))
-
-  const isAvailable = !domain.includes('taken') && !domain.includes('google')
+  const result = await queryOpenproviderDomain(domain)
   
   return {
     domain,
-    available: isAvailable,
-    price: 12.99,
-    currency: 'USD',
+    available: result.available,
+    price: result.price,
+    currency: result.currency,
   }
 }
