@@ -1,15 +1,23 @@
-'use server';
+'use server'
 
-import { openproviderRequest } from '@/lib/openprovider';
+import { openprovider } from '@/lib/openprovider'
 
-export async function checkDomainAvailability(domainName: string, extension: string) {
+export async function checkDomainAvailability(domain: string) {
   try {
-    const data = await openproviderRequest<any>('/domains/check', 'POST', {
-      domains: [{ name: domainName, extension }],
-      with_price: true,
-    });
-    return { success: true, data };
+    const response = await openprovider.domains.check({
+      domain: domain,
+    })
+    
+    return {
+      success: true,
+      domain: response.domain,
+      status: response.status, // e.g., 'active' (taken) or 'free' (available)
+      price: response.price,
+    }
   } catch (error: any) {
-    return { success: false, error: error.message };
+    return {
+      success: false,
+      error: error.message || 'Failed to check domain availability',
+    }
   }
 }
