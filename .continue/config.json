@@ -1,0 +1,16 @@
+{
+  "models": [
+    {
+      "title": "Qwen 2.5 Coder 7B",
+      "provider": "ollama",
+      "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+      "contextLength": 16384
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "Qwen 2.5 Coder 1.5B",
+    "provider": "ollama",
+    "model": "qwen2.5-coder:1.5b-instruct"
+  },
+  "allowAnonymousTelemetry": false
+}
