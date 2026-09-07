@@ -1,23 +1,28 @@
 'use server'
 
-import { openprovider } from '@/lib/openprovider'
+interface DomainCheckResult {
+  domain: string
+  available: boolean
+  price?: number
+  currency?: string
+}
 
-export async function checkDomainAvailability(domain: string) {
-  try {
-    const response = await openprovider.domains.check({
-      domain: domain,
-    })
-    
-    return {
-      success: true,
-      domain: response.domain,
-      status: response.status, // e.g., 'active' (taken) or 'free' (available)
-      price: response.price,
-    }
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error.message || 'Failed to check domain availability',
-    }
+export async function checkDomainAvailability(domainName: string): Promise<DomainCheckResult> {
+  // Clean input
+  const domain = domainName.trim().toLowerCase()
+  
+  // TODO: Replace with actual Openprovider API call
+  // const response = await fetch('https://api.openprovider.eu/v1/domains/check', { ... })
+  
+  // Simulated API latency and response for development
+  await new Promise((resolve) => setTimeout(resolve, 600))
+
+  const isAvailable = !domain.includes('taken') && !domain.includes('google')
+  
+  return {
+    domain,
+    available: isAvailable,
+    price: 12.99,
+    currency: 'USD',
   }
 }
