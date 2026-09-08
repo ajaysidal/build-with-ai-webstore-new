@@ -6,5 +6,6 @@
     "**/.next/**": true,
     "**/dist/**": true,
     "**/build/**": true
-  }
+  },
+  "files.useExperimentalFileWatcher": false
 }
